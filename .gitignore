@@ -2,13 +2,14 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Uu]ser[Ss]ettings/
+/ChessMultiplayerPlayerIO/Unity3D/Chess/ChessUnityProject/[Ll]ibrary/
+/ChessMultiplayerPlayerIO/Unity3D/Chess/ChessUnityProject/[Tt]emp/
+/ChessMultiplayerPlayerIO/Unity3D/Chess/ChessUnityProject/[Oo]bj/
+/ChessMultiplayerPlayerIO/Unity3D/Chess/ChessUnityProject/[Bb]uild/
+/ChessMultiplayerPlayerIO/Unity3D/Chess/ChessUnityProject/[Bb]uilds/
+/ChessMultiplayerPlayerIO/Unity3D/Chess/ChessUnityProject/[Ll]ogs/
+/ChessMultiplayerPlayerIO/Unity3D/Chess/ChessUnityProject/[Uu]ser[Ss]ettings/
+/ChessMultiplayerPlayerIO/Unity3D/Chess/ChessUnityProject_clone_0/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
