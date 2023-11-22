@@ -26,3 +26,17 @@ C:\Users\benma\Documents\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\
 C:\Users\benma\Documents\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\obj\Debug\Player.IO Test Server.csproj.CopyComplete
 C:\Users\benma\Documents\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\obj\Debug\Test Server.exe
 C:\Users\benma\Documents\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\obj\Debug\Test Server.pdb
+C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\bin\Debug\Test Server.exe.config
+C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\bin\Debug\Test Server.exe
+C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\bin\Debug\Test Server.pdb
+C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\bin\Debug\ChessGameMultiplayer.dll
+C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\bin\Debug\Player.IO Development Server.exe
+C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\bin\Debug\Player.IO GameLibrary.dll
+C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\bin\Debug\ChessGameMultiplayer.pdb
+C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\bin\Debug\Player.IO GameLibrary.xml
+C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\obj\Debug\Player.IO Test Server.csproj.AssemblyReference.cache
+C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\obj\Debug\Player.IO Test Server.csproj.SuggestedBindingRedirects.cache
+C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\obj\Debug\Player.IO Test Server.csproj.CoreCompileInputs.cache
+C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\obj\Debug\Player.IO Test Server.csproj.CopyComplete
+C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\obj\Debug\Test Server.exe
+C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Player.IO Test Server Project\obj\Debug\Test Server.pdb

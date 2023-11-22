@@ -9,25 +9,39 @@ public class ChessBoard : MonoBehaviour
     public ChessPieceController[,] BoardArray { get; private set; }
     public HashSet<ChessPieceController> PiecesOnBoard { get; private set; }
     
-    [Space(10),SerializeField] private ChessPieceView _pawnPrefab;
-    
-    private Dictionary<string,ChessPieceController> _piecesIdToController;
-    
     private static float _offsetPerCaseXY = 1f;
     private static float _offsetHeight = 0f;
+    
+    [Space(10), SerializeField] private PieceSelectUIController _pieceSelectUI;
+    [SerializeField] private BoardCaseController _caseControllerPrefab;
+    [Space(10), SerializeField] private ChessPieceView _pawnPrefab;
+    
+    private Dictionary<string,ChessPieceController> _piecesIdToController;
+    private ChessPieceController _currentSelectedPiece;
 
     private void Awake()
     {
         _piecesIdToController = new Dictionary<string, ChessPieceController>();
         BoardArray = new ChessPieceController[8, 8];
         PiecesOnBoard = new HashSet<ChessPieceController>();
+        
+        _pieceSelectUI.Set(false);
     }
 
     public void SetBoard()
     {
+        for (int y = 0; y < BoardArray.GetLength(1); y++)
+        {
+            for (int x = 0; x < BoardArray.GetLength(0); x++)
+            {
+                BoardCaseController caseController = Instantiate(_caseControllerPrefab);
+                caseController.Set(new Vector2Int(x,y));
+            }
+        }
+        
         for (int x = 0; x < 8; x++)
         {
-            PlayerGameManager.Instance.PlayerIoConnection.Send("CreatePiece", "Pawn", x, 1);
+            PlayerGameManager.Instance.PlayerIoConnection.Send("CreatePiece", "Pawn", x, PlayerGameManager.Instance.Team == 0 ? 1 : 6);
         }
     }
 
@@ -43,14 +57,14 @@ public class ChessBoard : MonoBehaviour
         
         ChessPieceView pawnView = null;
         PawnController pawnController = null;
-        
+
         switch (type)
         {
             case "Pawn":
                 pawnView = Instantiate(_pawnPrefab);
                 ChessPieceData data = new ChessPieceData()
                 {
-                    Type = type, ID = id, PieceOwnerID = ownerID, Coordinates = GetCoordinatesTeamVerified(coordinates,team), Team = team
+                    Type = type, ID = id, PieceOwnerID = ownerID, Coordinates = coordinates, Team = team
                 };
                 pawnController = new PawnController(data, pawnView);
                 break;
@@ -78,40 +92,12 @@ public class ChessBoard : MonoBehaviour
         _piecesIdToController.Add(id,pawnController);
         PiecesOnBoard.Add(pawnController);
         
-        PlayerGameManager.Instance.PlayerIoConnection.Send("MovePiece", 
-            BoardArray[coordinates.x,coordinates.y].Data.ID, coordinates.x,coordinates.y);
+        PlayerGameManager.Instance.PlayerIoConnection.Send("MovePiece", pawnController.Data.ID, coordinates.x,coordinates.y);
     }
 
     public static Vector3 GetWorldPositionFromCoordinates(Vector2Int coordinates)
     {
         return new Vector3(coordinates.x * _offsetPerCaseXY, _offsetHeight, coordinates.y * _offsetPerCaseXY);
-    }
-
-    public Vector2Int GetCoordinatesTeamVerified(Vector2Int coordinate, int team)
-    {
-        if (team == PlayerGameManager.Instance.Team)
-        {
-            return coordinate;
-        }
-
-        int boardSize = BoardArray.GetLength(0);
-        return new Vector2Int(GetInvertedCoordinate(coordinate.x,boardSize), GetInvertedCoordinate(coordinate.y,boardSize));
-    }
-
-    public static int GetInvertedCoordinate(int coordinate, int boardSize)
-    {
-        int c = coordinate;
-        int difference = c - boardSize/2;
-        if (difference < 0)
-        {
-            c = boardSize / 2 + Mathf.Abs(difference) - 1;
-        }
-        else
-        {
-            c = boardSize / 2 - Mathf.Abs(difference) - 1;
-        }
-
-        return c;
     }
 
     public void SendAllPiecesDataToServer()
@@ -136,8 +122,34 @@ public class ChessBoard : MonoBehaviour
         }
 
         ChessPieceController piece = _piecesIdToController[pieceID];
-        BoardArray[piece.Data.Coordinates.x, piece.Data.Coordinates.y] = null;
-        piece.MoveTo(GetCoordinatesTeamVerified(coordinates, piece.Data.Team));
-        BoardArray[coordinates.x, coordinates.y] = null;
+        BoardArray[piece.Data.Coordinates.x, piece.Data.Coordinates.x] = null;
+        piece.MoveTo(coordinates);
+        BoardArray[coordinates.x, coordinates.y] = piece;
+    }
+
+    public void SelectCase(Vector2Int coordinates)
+    {
+        ChessPieceController piece = BoardArray[coordinates.x, coordinates.y];
+        if (piece == null)
+        {
+            if (_currentSelectedPiece == null)
+            {
+                return;
+            }
+            
+            PlayerGameManager.Instance.PlayerIoConnection.Send("MovePiece", 
+                _currentSelectedPiece.Data.ID, coordinates.x, coordinates.y);
+            _currentSelectedPiece = null;
+            _pieceSelectUI.Set(false);
+            return;
+        }
+
+        if (piece.Data.Team != PlayerGameManager.Instance.Team)
+        {
+            return;
+        }
+        
+        _currentSelectedPiece = piece;
+        _pieceSelectUI.Set(coordinates);
     }
 }

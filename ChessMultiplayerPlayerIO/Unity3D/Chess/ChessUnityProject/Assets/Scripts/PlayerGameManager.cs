@@ -1,12 +1,14 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 using Common;
 using PlayerIOClient;
 
 public class PlayerGameManager : Singleton<PlayerGameManager>
 {
 	[field:Space(10)] [field:SerializeField] public ChessBoard Board { get; private set; }
+	[field:SerializeField] public Camera[] Cameras { get; private set; }
 	
 	public Connection PlayerIoConnection { get; private set; }
 	public int Team { get; private set; }
@@ -73,8 +75,6 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 		_joinedRoom = true;
 		
 		PlayerIoConnection.Send("Chat", $"I'm connected !");
-		
-		Board.SetBoard();
 	}
 
 	private void HandleMessage(object sender, Message m) 
@@ -90,6 +90,9 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 			{
 				case "SetTeam":
 					Team = m.GetInt(0);
+					Cameras[0].gameObject.SetActive(Team == 0);
+					Cameras[1].gameObject.SetActive(Team == 1);
+					Board.SetBoard();
 					break;
 				case "CreatePiece":
 					string createPieceType = m.GetString(0);
