@@ -49,11 +49,11 @@ public class ChessBoard : MonoBehaviour
     {
         if (_piecesIdToController.ContainsKey(id))
         {
-            Debug.LogError("this piece already exist");
+            PlayerGameManager.Instance.UI.DebugMessage("this piece already exist");
             return;
         }
         
-        Debug.Log($"Chess board creating {type}_{id} from {ownerID} at {coordinates.x},{coordinates.y}");
+        //PlayerGameManager.Instance.UI.DebugMessage($"Chess board creating {type}_{id} from {ownerID} at {coordinates.x},{coordinates.y}");
         
         ChessPieceView pawnView = null;
         PawnController pawnController = null;
@@ -116,11 +116,6 @@ public class ChessBoard : MonoBehaviour
     
     public void MovePiece(string pieceID, Vector2Int coordinates)
     {
-        if (PlayerGameManager.Instance.CanPlay() == false)
-        {
-            return;
-        }
-        
         if (_piecesIdToController.ContainsKey(pieceID) == false)
         {
             throw new Exception("this piece doesn't exist");
@@ -130,8 +125,6 @@ public class ChessBoard : MonoBehaviour
         BoardArray[piece.Data.Coordinates.x, piece.Data.Coordinates.x] = null;
         piece.MoveTo(coordinates);
         BoardArray[coordinates.x, coordinates.y] = piece;
-        
-        PlayerGameManager.Instance.PlayerIoConnection.Send("SetTurn");
     }
 
     public void SelectCase(Vector2Int coordinates)
@@ -139,15 +132,22 @@ public class ChessBoard : MonoBehaviour
         ChessPieceController piece = BoardArray[coordinates.x, coordinates.y];
         if (piece == null)
         {
-            if (_currentSelectedPiece == null)
+            if (_currentSelectedPiece == null || PlayerGameManager.Instance.CanPlay() == false)
             {
+                _currentSelectedPiece = null;
+                _pieceSelectUI.Set(false);
+                
                 return;
             }
             
             PlayerGameManager.Instance.PlayerIoConnection.Send("MovePiece", 
                 _currentSelectedPiece.Data.ID, coordinates.x, coordinates.y);
+            
             _currentSelectedPiece = null;
             _pieceSelectUI.Set(false);
+
+            PlayerGameManager.Instance.PlayerIoConnection.Send("SetTurn", PlayerGameManager.Instance.Turn + 1);
+
             return;
         }
 

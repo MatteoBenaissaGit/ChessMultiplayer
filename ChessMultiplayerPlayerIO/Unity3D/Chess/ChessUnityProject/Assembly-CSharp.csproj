@@ -49,6 +49,7 @@
      <Compile Include="Assets\Scripts\ChessBoard.cs" />
      <Compile Include="Assets\Scripts\Common\Singleton.cs" />
      <Compile Include="Assets\Scripts\Views\ChessPieceView.cs" />
+     <Compile Include="Assets\Scripts\Views\DebugMessageUI.cs" />
      <Compile Include="Assets\Scripts\Controllers\BoardInputController.cs" />
      <Compile Include="Assets\Visual\Free Low Poly Chess Set\Example\Scripts\CameraRotate.cs" />
      <Compile Include="Assets\Scripts\Controllers\BoardCaseController.cs" />
@@ -81,6 +82,7 @@
      <Folder Include="Assets\Visual\Free Low Poly Chess Set\Example\Scenes" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
      <Folder Include="Assets\Visual\Free Low Poly Chess Set\Board" />
+     <Folder Include="Assets\Visual\Fonts" />
      <Folder Include="Assets\TextMesh Pro" />
      <Folder Include="Assets\Visual\Free Low Poly Chess Set\Board\Mesh" />
      <Folder Include="Assets\Visual\Free Low Poly Chess Set\Rook\Prefabs" />
@@ -108,6 +110,7 @@
      <Folder Include="Assets\Visual\Free Low Poly Chess Set\King\Prefabs" />
      <Folder Include="Assets\TextMesh Pro\Resources\Style Sheets" />
      <Folder Include="Assets\TextMesh Pro\Fonts" />
+     <Folder Include="Assets\Resources" />
      <Folder Include="Assets\Visual\Free Low Poly Chess Set\Rook\Mesh" />
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
      <Folder Include="Assets\Visual" />
@@ -390,6 +393,9 @@
      </Reference>
      <Reference Include="PlayerIOUnity3DClient">
      <HintPath>C:\Users\matteo.benaissa\Documents\GitHub\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\ChessUnityProject\Assets\Plugins\PlayerIOUnity3DClient.dll</HintPath>
+     </Reference>
+     <Reference Include="DOTween">
+     <HintPath>C:\Users\matteo.benaissa\Documents\GitHub\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\ChessUnityProject\Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
      </Reference>
      <Reference Include="Unity.Android.Types">
      <HintPath>C:\Program Files\Unity 2022.3.1f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Types.dll</HintPath>
@@ -858,6 +864,10 @@
      </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{9b974c61-5f36-a5de-5020-f3a35b6d12db}</Project>
+      <Name>Assembly-CSharp-firstpass</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

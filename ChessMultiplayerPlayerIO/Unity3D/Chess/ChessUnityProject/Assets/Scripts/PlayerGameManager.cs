@@ -39,7 +39,7 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 			new Dictionary<string, string> { { "userId", _userId } },
 			null,
 			MasterServerJoined,
-			delegate (PlayerIOError error) { Debug.Log("Error connecting: " + error.ToString()); }
+			delegate (PlayerIOError error) { UI.DebugMessage("Error connecting: " + error.ToString()); }
 		);
 	}
 
@@ -50,12 +50,12 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 	
 	private void MasterServerJoined(Client client)
 	{
-		Debug.Log("Successfully connected to Player.IO");
+		UI.DebugMessage("Successfully connected to Player.IO");
 		
 		if (_useLocalServer)
 		{
 			client.Multiplayer.DevelopmentServer = new ServerEndpoint("localhost", 8184);
-			Debug.Log("Successfully created server end point");
+			UI.DebugMessage("Successfully created server end point");
 		}
 
 		client.Multiplayer.CreateJoinRoom(
@@ -65,13 +65,13 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 			null,
 			null,
 			RoomJoined,
-			delegate(PlayerIOError error) { Debug.Log("Error Joining Room: " + error.ToString()); }
+			delegate(PlayerIOError error) { UI.DebugMessage("Error Joining Room: " + error.ToString()); }
 		);
 	}
 
 	private void RoomJoined(Connection connection)
 	{
-		Debug.Log("Joined Room.");
+		UI.DebugMessage("Joined Room.");
 		
 		PlayerIoConnection = connection;
 		PlayerIoConnection.OnMessage += HandleMessage;
@@ -103,17 +103,17 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 					string createPieceOwnerId = m.GetString(2);
 					Vector2Int createPieceCreateCoordinates = new Vector2Int(m.GetInt(3), m.GetInt(4));
 					int createPieceTeam = m.GetInt(5);
-					Debug.Log($"create piece {createPieceType}_{createPieceId} for {createPieceOwnerId}, at {createPieceCreateCoordinates.x},{createPieceCreateCoordinates.y}");
+					UI.DebugMessage($"create piece {createPieceType}_{createPieceId} for {createPieceOwnerId}, at {createPieceCreateCoordinates.x},{createPieceCreateCoordinates.y}");
 					Board.CreatePieceAt(createPieceType, createPieceId, createPieceOwnerId, createPieceCreateCoordinates, createPieceTeam);
 					break;
 				case "MovePiece":
 					string pieceId = m.GetString(0);
 					Vector2Int moveCoordinates = new Vector2Int(m.GetInt(1), m.GetInt(2));
-					Debug.Log($"move piece {pieceId} to {moveCoordinates.x},{moveCoordinates.y}");
+					UI.DebugMessage($"move piece {pieceId} to {moveCoordinates.x},{moveCoordinates.y}");
 					Board.MovePiece(pieceId, moveCoordinates);
 					break;
 				case "SendPiecesToServer":
-					Debug.Log("send pieces data to server");
+					UI.DebugMessage("send pieces data to server");
 					Board.SendAllPiecesDataToServer();
 					break;
 				case "GetPieceFromServer":
@@ -122,18 +122,21 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 					string getPieceOwnerId = m.GetString(2);
 					Vector2Int getPieceCreateCoordinates = new Vector2Int(m.GetInt(3), m.GetInt(4));
 					int getPieceTeam = m.GetInt(5);
-					Debug.Log("get piece from server");
+					UI.DebugMessage("get piece from server");
 					Board.GetPieceDataFromServer(getPieceType, getPieceId, getPieceOwnerId, getPieceCreateCoordinates, getPieceTeam);
 					break;
 				case "GetGameInfosFromServer":
+					UI.DebugMessage("get game infos from server");
 					int turnInfo = m.GetInt(0);
 					SetTurn(turnInfo);
 					break;
 				case "SendGameInfosToServer":
+					UI.DebugMessage("send game infos from server");
 					PlayerIoConnection.Send("SendGameInfosToPlayers", Turn);
 					break;
 				case "SetTurn":
 					int turn = m.GetInt(0);
+					UI.DebugMessage($"set turn {turn}");
 					SetTurn(turn);
 					break;
 			}
@@ -149,7 +152,6 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 
 	public void SetTurn(int turn)
 	{
-		Debug.Log($"turn {turn}");
 		Turn = turn;
 		UI.SetTurnUI();
 	}
