@@ -116,6 +116,11 @@ public class ChessBoard : MonoBehaviour
     
     public void MovePiece(string pieceID, Vector2Int coordinates)
     {
+        if (PlayerGameManager.Instance.CanPlay() == false)
+        {
+            return;
+        }
+        
         if (_piecesIdToController.ContainsKey(pieceID) == false)
         {
             throw new Exception("this piece doesn't exist");
@@ -125,6 +130,8 @@ public class ChessBoard : MonoBehaviour
         BoardArray[piece.Data.Coordinates.x, piece.Data.Coordinates.x] = null;
         piece.MoveTo(coordinates);
         BoardArray[coordinates.x, coordinates.y] = piece;
+        
+        PlayerGameManager.Instance.PlayerIoConnection.Send("SetTurn");
     }
 
     public void SelectCase(Vector2Int coordinates)

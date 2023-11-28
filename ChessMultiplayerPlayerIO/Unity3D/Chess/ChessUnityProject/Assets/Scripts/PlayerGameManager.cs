@@ -4,14 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using Common;
 using PlayerIOClient;
+using Views;
 
 public class PlayerGameManager : Singleton<PlayerGameManager>
 {
 	[field:Space(10)] [field:SerializeField] public ChessBoard Board { get; private set; }
 	[field:SerializeField] public Camera[] Cameras { get; private set; }
+	[field:SerializeField] public BoardUI UI { get; private set; }
 	
 	public Connection PlayerIoConnection { get; private set; }
 	public int Team { get; private set; }
+	public int Turn { get; private set; }
 	
 	private const string GameId = "firsttakeonplayerio-ixhwduuevk2vbbrptwfga";
 	private const string ConnectionId = "public";
@@ -20,7 +23,7 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 	
 	private List<Message> _messagesList = new List<Message>();
 	private bool _joinedRoom;
-	private bool _useLocalServer = true;
+	private bool _useLocalServer = false;
 	private string _userId;
 	
 	protected override void InternalAwake()
@@ -122,6 +125,17 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 					Debug.Log("get piece from server");
 					Board.GetPieceDataFromServer(getPieceType, getPieceId, getPieceOwnerId, getPieceCreateCoordinates, getPieceTeam);
 					break;
+				case "GetGameInfosFromServer":
+					int turnInfo = m.GetInt(0);
+					SetTurn(turnInfo);
+					break;
+				case "SendGameInfosToServer":
+					PlayerIoConnection.Send("SendGameInfosToPlayers", Turn);
+					break;
+				case "SetTurn":
+					int turn = m.GetInt(0);
+					SetTurn(turn);
+					break;
 			}
 		}
 
@@ -131,5 +145,19 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 	private void OnApplicationQuit()
 	{
 		PlayerIoConnection?.Send("Chat", "I left !");
+	}
+
+	public void SetTurn(int turn)
+	{
+		Debug.Log($"turn {turn}");
+		Turn = turn;
+		UI.SetTurnUI();
+	}
+	
+	public bool CanPlay()
+	{
+		bool isMyTurn = Turn % 2 == Team;
+
+		return isMyTurn;
 	}
 }

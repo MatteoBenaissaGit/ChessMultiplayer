@@ -49,6 +49,7 @@ namespace MushroomsUnity3DExample {
 					playerJoining.Send("PlayerJoined", player.ConnectUserId);
 
 					player.Send("SendPiecesToServer");
+					player.Send("SendGameInfosToServer");
 				}
 			}
 
@@ -107,6 +108,24 @@ namespace MushroomsUnity3DExample {
                         player.Send("GetPieceFromServer", getPieceType, getPieceId, getPieceOwnerId, getPieceX, getPieceY, getPieceTeam);
                     }
                     break;
+				case "SendGameInfosToPlayers":
+					int turnInfo = message.GetInt(0);
+					foreach (Player player in base.Players)
+					{
+						if (player.ConnectUserId == playerSender.ConnectUserId)
+						{
+							continue;
+						}
+						player.Send("GetGameInfosFromServer", turnInfo);
+					}
+					break;
+				case "SetTurn":
+					int turn = message.GetInt(0);
+					foreach (Player player in base.Players)
+					{
+						player.Send("SetTurn", turn);
+					}
+					break;
 			}
 		}
 	}
