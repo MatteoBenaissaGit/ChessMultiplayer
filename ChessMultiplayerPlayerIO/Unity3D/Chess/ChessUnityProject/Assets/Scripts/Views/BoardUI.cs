@@ -11,7 +11,11 @@ namespace Views
 
         public void SetTurnUI()
         {
-            _turnText.text = "Turn " + PlayerGameManager.Instance.Turn;
+            bool whiteTurn = PlayerGameManager.Instance.Turn % 2 == 0;
+            string text = whiteTurn ? "Turn white" : "Turn black";
+            Color color = whiteTurn ? Color.white : Color.black;
+            _turnText.text = text;
+            _turnText.color = color;
         }
 
         public void DebugMessage(string message)

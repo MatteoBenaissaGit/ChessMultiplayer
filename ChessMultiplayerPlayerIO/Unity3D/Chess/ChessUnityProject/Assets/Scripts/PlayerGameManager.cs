@@ -16,6 +16,8 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 	public int Team { get; private set; }
 	public int Turn { get; private set; }
 	
+	[SerializeField] private bool _useLocalServer;
+	
 	private const string GameId = "firsttakeonplayerio-ixhwduuevk2vbbrptwfga";
 	private const string ConnectionId = "public";
 	private const string RoomId = "UnityDefaultRoomID";
@@ -23,7 +25,6 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 	
 	private List<Message> _messagesList = new List<Message>();
 	private bool _joinedRoom;
-	private bool _useLocalServer = false;
 	private string _userId;
 	
 	protected override void InternalAwake()
@@ -136,7 +137,6 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 					break;
 				case "SetTurn":
 					int turn = m.GetInt(0);
-					UI.DebugMessage($"set turn {turn}");
 					SetTurn(turn);
 					break;
 			}
@@ -152,6 +152,7 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 
 	public void SetTurn(int turn)
 	{
+		UI.DebugMessage($"set turn {turn}");
 		Turn = turn;
 		UI.SetTurnUI();
 	}

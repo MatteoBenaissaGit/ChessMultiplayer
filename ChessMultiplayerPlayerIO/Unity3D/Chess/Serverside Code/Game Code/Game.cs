@@ -30,11 +30,16 @@ namespace MushroomsUnity3DExample
 		// This method is called whenever a player joins the game
 		public override void UserJoined(Player playerJoining)
 		{
-			if (base.PlayerCount >= 3)
+			if (base.PlayerCount >= 3) //if more than 2 player, disconnect
 			{
 				playerJoining.Disconnect();
 				Console.WriteLine("no more player can join");
 				return;
+			}
+
+			if (base.PlayerCount == 1) //if first player, set turn to 0
+			{
+				playerJoining.Send("SetTurn", 0);
 			}
 
 			int team = base.PlayerCount - 1;
