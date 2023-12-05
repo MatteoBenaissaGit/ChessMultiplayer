@@ -51,6 +51,7 @@
      <Compile Include="Assets\Scripts\Views\ChessPieceView.cs" />
      <Compile Include="Assets\Scripts\Views\DebugMessageUI.cs" />
      <Compile Include="Assets\Scripts\Controllers\BoardInputController.cs" />
+     <Compile Include="Assets\Scripts\Controllers\ChessPieceBehaviour.cs" />
      <Compile Include="Assets\Visual\Free Low Poly Chess Set\Example\Scripts\CameraRotate.cs" />
      <Compile Include="Assets\Scripts\Controllers\BoardCaseController.cs" />
      <Compile Include="Assets\Scripts\Views\BoardUI.cs" />

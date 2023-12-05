@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Controllers;
 using UnityEngine;
 using Views;
+using Object = UnityEngine.Object;
 
 public class ChessBoard : MonoBehaviour
 {
@@ -13,11 +14,13 @@ public class ChessBoard : MonoBehaviour
     private static float _offsetHeight = 0f;
     
     [Space(10), SerializeField] private PieceSelectUIController _pieceSelectUI;
+    [SerializeField] private GameObject _pieceCanMoveToUIPrefab;
     [SerializeField] private BoardCaseController _caseControllerPrefab;
     [Space(10), SerializeField] private ChessPieceView _pawnPrefab;
     
     private Dictionary<string,ChessPieceController> _piecesIdToController;
     private ChessPieceController _currentSelectedPiece;
+    private List<GameObject> _pieceCanMoveToUIList = new List<GameObject>();
 
     private void Awake()
     {
@@ -56,7 +59,7 @@ public class ChessBoard : MonoBehaviour
         //PlayerGameManager.Instance.UI.DebugMessage($"Chess board creating {type}_{id} from {ownerID} at {coordinates.x},{coordinates.y}");
         
         ChessPieceView pawnView = null;
-        PawnController pawnController = null;
+        ChessPieceController pawnController = null;
 
         switch (type)
         {
@@ -66,7 +69,7 @@ public class ChessBoard : MonoBehaviour
                 {
                     Type = type, ID = id, PieceOwnerID = ownerID, Coordinates = coordinates, Team = team
                 };
-                pawnController = new PawnController(data, pawnView);
+                pawnController = new ChessPieceController(data, pawnView, new PawnBehaviour(team));
                 break;
             case "King":
                 break;
@@ -130,32 +133,76 @@ public class ChessBoard : MonoBehaviour
     public void SelectCase(Vector2Int coordinates)
     {
         ChessPieceController piece = BoardArray[coordinates.x, coordinates.y];
+        
         if (piece == null)
         {
-            if (_currentSelectedPiece == null || PlayerGameManager.Instance.CanPlay() == false)
+            if (_currentSelectedPiece == null 
+                || PlayerGameManager.Instance.CanPlay() == false
+                || _currentSelectedPiece.CanPieceMoveTo(coordinates) == false)
             {
-                _currentSelectedPiece = null;
-                _pieceSelectUI.Set(false);
-                
+                ClearCurrentSelectPiece();
+                return;
+            }
+
+            _currentSelectedPiece.Behaviour.HasMoved();
+            PlayerGameManager.Instance.PlayerIoConnection.Send("MovePiece", _currentSelectedPiece.Data.ID, coordinates.x, coordinates.y);
+            PlayerGameManager.Instance.PlayerIoConnection.Send("SetTurn", PlayerGameManager.Instance.Turn + 1);
+
+            ClearCurrentSelectPiece();
+
+            return;
+        }
+        
+        if (piece.Data.Team != PlayerGameManager.Instance.Team)
+        {
+            if (PlayerGameManager.Instance.CanPlay() == false || _currentSelectedPiece.CanPieceMoveTo(coordinates) == false)
+            {
+                ClearCurrentSelectPiece();
                 return;
             }
             
+            PlayerGameManager.Instance.PlayerIoConnection.Send("DestroyPiece", piece.Data.ID);
+            PlayerGameManager.Instance.PlayerIoConnection.Send("SetTurn", PlayerGameManager.Instance.Turn + 1);
             PlayerGameManager.Instance.PlayerIoConnection.Send("MovePiece", _currentSelectedPiece.Data.ID, coordinates.x, coordinates.y);
             
-            _currentSelectedPiece = null;
-            _pieceSelectUI.Set(false);
-
-            PlayerGameManager.Instance.PlayerIoConnection.Send("SetTurn", PlayerGameManager.Instance.Turn + 1);
+            ClearCurrentSelectPiece();
 
             return;
         }
 
-        if (piece.Data.Team != PlayerGameManager.Instance.Team)
+
+        ClearCurrentSelectPiece();
+        _currentSelectedPiece = piece;
+        _pieceSelectUI.Set(coordinates);
+
+        List<Vector2Int> possibleMoves = _currentSelectedPiece.Behaviour.GetPossibleTilesFromCoordinates(coordinates);
+        foreach (Vector2Int coordinate in possibleMoves)
+        {
+            Vector3 worldPosition = GetWorldPositionFromCoordinates(coordinate);
+            worldPosition.y = 0.1f;
+            _pieceCanMoveToUIList.Add(Instantiate(_pieceCanMoveToUIPrefab, worldPosition, Quaternion.identity));
+        }
+    }
+
+    private void ClearCurrentSelectPiece()
+    {
+        _currentSelectedPiece = null;
+        _pieceSelectUI.Set(false);
+        
+        if (_pieceCanMoveToUIList.Count <= 0)
         {
             return;
         }
         
-        _currentSelectedPiece = piece;
-        _pieceSelectUI.Set(coordinates);
+        _pieceCanMoveToUIList.ForEach(Destroy);
+        _pieceCanMoveToUIList.Clear();
+    }
+
+    public void DestroyPiece(string pieceID)
+    {
+        ChessPieceController piece = _piecesIdToController[pieceID];
+        BoardArray[piece.Data.Coordinates.x, piece.Data.Coordinates.y] = null;
+        PiecesOnBoard.Remove(piece);
+        Object.Destroy(piece.View.gameObject);
     }
 }

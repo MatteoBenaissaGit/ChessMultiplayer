@@ -23,29 +23,30 @@ namespace Controllers
         public int Team { get; internal set; }
     }
     
-    public abstract class ChessPieceController
+    public class ChessPieceController
     {
         public ChessPieceData Data { get; private set; }
         public ChessPieceView View { get; internal set; }
+        public ChessPieceBehaviour Behaviour { get; internal set; }
 
-        public ChessPieceController(ChessPieceData data, ChessPieceView view)
+        public ChessPieceController(ChessPieceData data, ChessPieceView view, ChessPieceBehaviour behaviour)
         {
             Data = data;
             View = view;
+            Behaviour = behaviour;
         }
 
-        public virtual void MoveTo(Vector2Int coordinates)
+        public bool CanPieceMoveTo(Vector2Int coordinates)
+        {
+            bool move = Behaviour.GetPossibleTilesFromCoordinates(Data.Coordinates).Contains(coordinates);
+            bool attack = Behaviour.GetPossibleTilesTakeFromCoordinates(Data.Coordinates).Contains(coordinates);
+            return move || attack;
+        }
+
+        public void MoveTo(Vector2Int coordinates)
         {
             Data.Coordinates = coordinates;
             View.MoveTo(Data.Coordinates);
-        }
-    }
-
-    public class PawnController : ChessPieceController
-    {
-        public PawnController(ChessPieceData data, ChessPieceView view) : base(data, view)
-        {
-            
         }
     }
 }

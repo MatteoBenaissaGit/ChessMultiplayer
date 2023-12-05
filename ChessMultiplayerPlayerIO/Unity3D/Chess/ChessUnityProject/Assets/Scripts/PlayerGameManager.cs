@@ -113,6 +113,11 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 					UI.DebugMessage($"move piece {pieceId} to {moveCoordinates.x},{moveCoordinates.y}");
 					Board.MovePiece(pieceId, moveCoordinates);
 					break;
+				case "DestroyPiece":
+					string destroyPieceId = m.GetString(0);
+					UI.DebugMessage($"Destroy piece {destroyPieceId}");
+					Board.DestroyPiece(destroyPieceId);
+					break;
 				case "SendPiecesToServer":
 					UI.DebugMessage("send pieces data to server");
 					Board.SendAllPiecesDataToServer();

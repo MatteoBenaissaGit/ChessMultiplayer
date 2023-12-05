@@ -131,6 +131,13 @@ namespace MushroomsUnity3DExample
 						player.Send("SetTurn", turn);
 					}
 					break;
+				case "DestroyPiece":
+                    string destroyPieceID = message.GetString(0);
+                    foreach (Player player in base.Players)
+                    {
+                        player.Send("DestroyPiece", destroyPieceID);
+                    }
+                    break;
 			}
 		}
 	}
