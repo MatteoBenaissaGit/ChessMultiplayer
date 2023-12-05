@@ -122,7 +122,7 @@ public class ChessBoard : MonoBehaviour
         }
 
         ChessPieceController piece = _piecesIdToController[pieceID];
-        BoardArray[piece.Data.Coordinates.x, piece.Data.Coordinates.x] = null;
+        BoardArray[piece.Data.Coordinates.x, piece.Data.Coordinates.y] = null;
         piece.MoveTo(coordinates);
         BoardArray[coordinates.x, coordinates.y] = piece;
     }
@@ -140,8 +140,7 @@ public class ChessBoard : MonoBehaviour
                 return;
             }
             
-            PlayerGameManager.Instance.PlayerIoConnection.Send("MovePiece", 
-                _currentSelectedPiece.Data.ID, coordinates.x, coordinates.y);
+            PlayerGameManager.Instance.PlayerIoConnection.Send("MovePiece", _currentSelectedPiece.Data.ID, coordinates.x, coordinates.y);
             
             _currentSelectedPiece = null;
             _pieceSelectUI.Set(false);
