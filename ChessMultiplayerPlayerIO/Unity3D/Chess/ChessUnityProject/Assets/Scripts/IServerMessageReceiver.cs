@@ -1,12 +1,12 @@
 ﻿using PlayerIOClient;
 using UnityEngine;
 
-public abstract class IServerMessageReceiver
+public abstract class ServerMessageReceiver
 {
     public abstract void Receive(Message m);
 }
 
-public class ReceiveSetTurn : IServerMessageReceiver
+public class ReceiveSetTurn : ServerMessageReceiver
 {
     public override void Receive(Message m)
     {
@@ -15,7 +15,7 @@ public class ReceiveSetTurn : IServerMessageReceiver
     }
 }
 
-public class ReceiveSendGameInfosToServer : IServerMessageReceiver
+public class ReceiveSendGameInfosToServer : ServerMessageReceiver
 {
     public override void Receive(Message m)
     {
@@ -25,7 +25,7 @@ public class ReceiveSendGameInfosToServer : IServerMessageReceiver
     }
 }
 
-public class ReceiveGetGameInfosFromServer : IServerMessageReceiver
+public class ReceiveGetGameInfosFromServer : ServerMessageReceiver
 {
     public override void Receive(Message m)
     {
@@ -35,7 +35,7 @@ public class ReceiveGetGameInfosFromServer : IServerMessageReceiver
     }
 }
 
-public class ReceiveGetPieceFromServer : IServerMessageReceiver
+public class ReceiveGetPieceFromServer : ServerMessageReceiver
 {
     public override void Receive(Message m)
     {
@@ -50,7 +50,7 @@ public class ReceiveGetPieceFromServer : IServerMessageReceiver
     }
 }
 
-public class ReceiveSendPiecesToServer : IServerMessageReceiver
+public class ReceiveSendPiecesToServer : ServerMessageReceiver
 {
     public override void Receive(Message m)
     {
@@ -59,7 +59,7 @@ public class ReceiveSendPiecesToServer : IServerMessageReceiver
     }
 }
 
-public class ReceiveDestroyPiece : IServerMessageReceiver
+public class ReceiveDestroyPiece : ServerMessageReceiver
 {
     public override void Receive(Message m)
     {
@@ -69,7 +69,7 @@ public class ReceiveDestroyPiece : IServerMessageReceiver
     }
 }
 
-public class ReceiveMovePiece : IServerMessageReceiver
+public class ReceiveMovePiece : ServerMessageReceiver
 {
     public override void Receive(Message m)
     {
@@ -81,7 +81,7 @@ public class ReceiveMovePiece : IServerMessageReceiver
     }
 }
 
-public class ReceiveCreatePiece : IServerMessageReceiver
+public class ReceiveCreatePiece : ServerMessageReceiver
 {
     public override void Receive(Message m)
     {
@@ -98,7 +98,7 @@ public class ReceiveCreatePiece : IServerMessageReceiver
     }
 }
 
-public class ReceiveSetTeam : IServerMessageReceiver
+public class ReceiveSetTeam : ServerMessageReceiver
 {
     public override void Receive(Message m)
     {

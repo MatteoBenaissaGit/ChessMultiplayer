@@ -27,7 +27,7 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 	private bool _joinedRoom;
 	private string _userId;
 
-	private Dictionary<string, IServerMessageReceiver> _receivedMessageToMethod = new Dictionary<string, IServerMessageReceiver>();
+	private Dictionary<string, ServerMessageReceiver> _receivedMessageToMethod = new Dictionary<string, ServerMessageReceiver>();
 
 	protected override void InternalAwake()
 	{
@@ -102,7 +102,7 @@ public class PlayerGameManager : Singleton<PlayerGameManager>
 	{
 		foreach (Message m in _messagesList)
 		{
-			if (_receivedMessageToMethod.TryGetValue(m.Type, out IServerMessageReceiver receiver) == false)
+			if (_receivedMessageToMethod.TryGetValue(m.Type, out ServerMessageReceiver receiver) == false)
 			{
 				continue;
 			}

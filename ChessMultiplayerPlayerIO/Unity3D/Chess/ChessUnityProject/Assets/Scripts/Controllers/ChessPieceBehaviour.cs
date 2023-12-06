@@ -72,7 +72,7 @@ namespace Controllers
 
     public class BishopBehaviour : ChessPieceBehaviour
     {
-        public Vector2Int[] Directions = new Vector2Int[]
+        public static Vector2Int[] Directions = new Vector2Int[]
         {
             new Vector2Int(1,1),
             new Vector2Int(-1,-1),
@@ -133,11 +133,11 @@ namespace Controllers
 
     public class RookBehaviour : ChessPieceBehaviour
     {
-        public Vector2Int[] Directions = new Vector2Int[]
+        public static Vector2Int[] Directions = new Vector2Int[]
         {
             new Vector2Int(1,0),
             new Vector2Int(0,1),
-            new Vector2Int(1,0),
+            new Vector2Int(-1,0),
             new Vector2Int(0,-1),
         };
         
