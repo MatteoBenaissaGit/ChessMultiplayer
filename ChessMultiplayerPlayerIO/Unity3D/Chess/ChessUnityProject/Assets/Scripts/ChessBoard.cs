@@ -17,6 +17,7 @@ public class ChessBoard : MonoBehaviour
     [SerializeField] private GameObject _pieceCanMoveToUIPrefab;
     [SerializeField] private BoardCaseController _caseControllerPrefab;
     [Space(10), SerializeField] private ChessPieceView _pawnPrefab;
+    [SerializeField] private ChessPieceView _bishopPrefab;
     
     private Dictionary<string,ChessPieceController> _piecesIdToController;
     private ChessPieceController _currentSelectedPiece;
@@ -42,10 +43,14 @@ public class ChessBoard : MonoBehaviour
             }
         }
         
+        //pawn
         for (int x = 0; x < 8; x++)
         {
             PlayerGameManager.Instance.PlayerIoConnection.Send("CreatePiece", "Pawn", x, PlayerGameManager.Instance.Team == 0 ? 1 : 6);
         }
+        //bishops
+        PlayerGameManager.Instance.PlayerIoConnection.Send("CreatePiece", "Bishop", 2, PlayerGameManager.Instance.Team == 0 ? 0 : 7);
+        PlayerGameManager.Instance.PlayerIoConnection.Send("CreatePiece", "Bishop", 5, PlayerGameManager.Instance.Team == 0 ? 0 : 7);
     }
 
     public void CreatePieceAt(string type, string id, string ownerID, Vector2Int coordinates, int team)
@@ -58,18 +63,18 @@ public class ChessBoard : MonoBehaviour
         
         //PlayerGameManager.Instance.UI.DebugMessage($"Chess board creating {type}_{id} from {ownerID} at {coordinates.x},{coordinates.y}");
         
-        ChessPieceView pawnView = null;
-        ChessPieceController pawnController = null;
-
+        ChessPieceView chessPieceView = null;
+        ChessPieceController pieceController = null;
+        ChessPieceData pieceData = new ChessPieceData()
+        {
+            Type = type, ID = id, PieceOwnerID = ownerID, Coordinates = coordinates, Team = team
+        };
+            
         switch (type)
         {
             case "Pawn":
-                pawnView = Instantiate(_pawnPrefab);
-                ChessPieceData data = new ChessPieceData()
-                {
-                    Type = type, ID = id, PieceOwnerID = ownerID, Coordinates = coordinates, Team = team
-                };
-                pawnController = new ChessPieceController(data, pawnView, new PawnBehaviour(team));
+                chessPieceView = Instantiate(_pawnPrefab);
+                pieceController = new ChessPieceController(pieceData, chessPieceView, new PawnBehaviour(team));
                 break;
             case "King":
                 break;
@@ -78,6 +83,8 @@ public class ChessBoard : MonoBehaviour
             case "Knight":
                 break;
             case "Bishop":
+                chessPieceView = Instantiate(_bishopPrefab);
+                pieceController = new ChessPieceController(pieceData, chessPieceView, new BishopBehaviour(team));
                 break;
             case "Rook":
                 break;
@@ -85,17 +92,17 @@ public class ChessBoard : MonoBehaviour
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
 
-        if (pawnView == null)
+        if (chessPieceView == null)
         {
             throw new Exception("Pawn not created correctly");
         }
         
-        pawnView.SetPawnView(pawnController);
-        BoardArray[coordinates.x, coordinates.y] = pawnView.Controller;
-        _piecesIdToController.Add(id,pawnController);
-        PiecesOnBoard.Add(pawnController);
+        chessPieceView.SetPawnView(pieceController);
+        BoardArray[coordinates.x, coordinates.y] = chessPieceView.Controller;
+        _piecesIdToController.Add(id,pieceController);
+        PiecesOnBoard.Add(pieceController);
         
-        PlayerGameManager.Instance.PlayerIoConnection.Send("MovePiece", pawnController.Data.ID, coordinates.x,coordinates.y);
+        PlayerGameManager.Instance.PlayerIoConnection.Send("MovePiece", pieceController.Data.ID, coordinates.x,coordinates.y);
     }
 
     public static Vector3 GetWorldPositionFromCoordinates(Vector2Int coordinates)
@@ -138,7 +145,8 @@ public class ChessBoard : MonoBehaviour
         {
             if (_currentSelectedPiece == null 
                 || PlayerGameManager.Instance.CanPlay() == false
-                || _currentSelectedPiece.CanPieceMoveTo(coordinates) == false)
+                || _currentSelectedPiece.CanPieceMoveTo(coordinates) == false
+                || _currentSelectedPiece.Behaviour.GetImpossibleTileMoveFromCoordinates(_currentSelectedPiece.Data.Coordinates).Contains(coordinates))
             {
                 ClearCurrentSelectPiece();
                 return;
@@ -155,7 +163,9 @@ public class ChessBoard : MonoBehaviour
         
         if (piece.Data.Team != PlayerGameManager.Instance.Team)
         {
-            if (PlayerGameManager.Instance.CanPlay() == false || _currentSelectedPiece.CanPieceMoveTo(coordinates) == false)
+            if (PlayerGameManager.Instance.CanPlay() == false 
+                || _currentSelectedPiece.CanPieceMoveTo(coordinates) == false
+                || _currentSelectedPiece.Behaviour.GetImpossibleTilesTakeFromCoordinates(_currentSelectedPiece.Data.Coordinates).Contains(coordinates))
             {
                 ClearCurrentSelectPiece();
                 return;
@@ -175,7 +185,7 @@ public class ChessBoard : MonoBehaviour
         _currentSelectedPiece = piece;
         _pieceSelectUI.Set(coordinates);
 
-        List<Vector2Int> possibleMoves = _currentSelectedPiece.Behaviour.GetPossibleTilesFromCoordinates(coordinates);
+        List<Vector2Int> possibleMoves = _currentSelectedPiece.Behaviour.GetPossibleTileMoveFromCoordinates(coordinates);
         foreach (Vector2Int coordinate in possibleMoves)
         {
             Vector3 worldPosition = GetWorldPositionFromCoordinates(coordinate);
@@ -204,5 +214,15 @@ public class ChessBoard : MonoBehaviour
         BoardArray[piece.Data.Coordinates.x, piece.Data.Coordinates.y] = null;
         PiecesOnBoard.Remove(piece);
         Object.Destroy(piece.View.gameObject);
+    }
+
+    public bool IsCoordinateOutOfBoard(Vector2Int coordinate)
+    {
+        bool outOfBoard = coordinate.x < 0 
+                          || coordinate.y < 0
+                          || coordinate.x >= BoardArray.GetLength(0)
+                          || coordinate.y >= BoardArray.GetLength(1);
+
+        return outOfBoard;
     }
 }

@@ -25,3 +25,12 @@ C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess
 C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Game Code\obj\Debug\Game Code.csproj.CopyComplete
 C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Game Code\obj\Debug\ChessGameMultiplayer.dll
 C:\Users\benma\Documents\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Game Code\obj\Debug\ChessGameMultiplayer.pdb
+C:\Users\matteo.benaissa\Documents\GitHub\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Game Code\bin\Debug\ChessGameMultiplayer.dll
+C:\Users\matteo.benaissa\Documents\GitHub\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Game Code\bin\Debug\ChessGameMultiplayer.pdb
+C:\Users\matteo.benaissa\Documents\GitHub\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Game Code\bin\Debug\Player.IO GameLibrary.dll
+C:\Users\matteo.benaissa\Documents\GitHub\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Game Code\bin\Debug\Player.IO GameLibrary.xml
+C:\Users\matteo.benaissa\Documents\GitHub\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Game Code\obj\Debug\Game Code.csproj.AssemblyReference.cache
+C:\Users\matteo.benaissa\Documents\GitHub\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Game Code\obj\Debug\Game Code.csproj.CoreCompileInputs.cache
+C:\Users\matteo.benaissa\Documents\GitHub\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Game Code\obj\Debug\Game Code.csproj.CopyComplete
+C:\Users\matteo.benaissa\Documents\GitHub\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Game Code\obj\Debug\ChessGameMultiplayer.dll
+C:\Users\matteo.benaissa\Documents\GitHub\ChessMultiplayer\ChessMultiplayerPlayerIO\Unity3D\Chess\Serverside Code\Game Code\obj\Debug\ChessGameMultiplayer.pdb

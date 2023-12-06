@@ -64,6 +64,7 @@ namespace MushroomsUnity3DExample
 		// This method is called when a player leaves the game
 		public override void UserLeft(Player player)
 		{
+			player.Disconnect();
 			Broadcast("PlayerLeft", player.ConnectUserId);
 			Console.WriteLine($"Player {player.ConnectUserId} left");
 		}

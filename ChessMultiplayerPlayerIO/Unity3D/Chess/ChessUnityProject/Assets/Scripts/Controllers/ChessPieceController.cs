@@ -38,9 +38,9 @@ namespace Controllers
 
         public bool CanPieceMoveTo(Vector2Int coordinates)
         {
-            bool move = Behaviour.GetPossibleTilesFromCoordinates(Data.Coordinates).Contains(coordinates);
+            bool move = Behaviour.GetPossibleTileMoveFromCoordinates(Data.Coordinates).Contains(coordinates);
             bool attack = Behaviour.GetPossibleTilesTakeFromCoordinates(Data.Coordinates).Contains(coordinates);
-            return move || attack;
+            return (move || attack);
         }
 
         public void MoveTo(Vector2Int coordinates)
