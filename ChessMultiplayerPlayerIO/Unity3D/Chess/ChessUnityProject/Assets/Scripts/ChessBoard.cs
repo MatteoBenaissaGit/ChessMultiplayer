@@ -18,6 +18,7 @@ public class ChessBoard : MonoBehaviour
     [SerializeField] private BoardCaseController _caseControllerPrefab;
     [Space(10), SerializeField] private ChessPieceView _pawnPrefab;
     [SerializeField] private ChessPieceView _bishopPrefab;
+    [SerializeField] private ChessPieceView _rookPrefab;
     
     private Dictionary<string,ChessPieceController> _piecesIdToController;
     private ChessPieceController _currentSelectedPiece;
@@ -51,6 +52,10 @@ public class ChessBoard : MonoBehaviour
         //bishops
         PlayerGameManager.Instance.PlayerIoConnection.Send("CreatePiece", "Bishop", 2, PlayerGameManager.Instance.Team == 0 ? 0 : 7);
         PlayerGameManager.Instance.PlayerIoConnection.Send("CreatePiece", "Bishop", 5, PlayerGameManager.Instance.Team == 0 ? 0 : 7);
+        
+        //rooks
+        PlayerGameManager.Instance.PlayerIoConnection.Send("CreatePiece", "Rook", 0, PlayerGameManager.Instance.Team == 0 ? 0 : 7);
+        PlayerGameManager.Instance.PlayerIoConnection.Send("CreatePiece", "Rook", 7, PlayerGameManager.Instance.Team == 0 ? 0 : 7);
     }
 
     public void CreatePieceAt(string type, string id, string ownerID, Vector2Int coordinates, int team)
@@ -87,6 +92,8 @@ public class ChessBoard : MonoBehaviour
                 pieceController = new ChessPieceController(pieceData, chessPieceView, new BishopBehaviour(team));
                 break;
             case "Rook":
+                chessPieceView = Instantiate(_rookPrefab);
+                pieceController = new ChessPieceController(pieceData, chessPieceView, new RookBehaviour(team));
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);

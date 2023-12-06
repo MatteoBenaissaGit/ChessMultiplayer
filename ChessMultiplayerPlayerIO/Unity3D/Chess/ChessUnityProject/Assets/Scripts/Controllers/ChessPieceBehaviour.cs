@@ -5,6 +5,7 @@ namespace Controllers
 {
     public abstract class ChessPieceBehaviour
     {
+        protected int BoardSize = 7;
         protected int Team;
         protected int Sign;
         public ChessPieceBehaviour(int team)
@@ -71,7 +72,7 @@ namespace Controllers
 
     public class BishopBehaviour : ChessPieceBehaviour
     {
-        public Vector2Int[] DiagonalDirections = new Vector2Int[]
+        public Vector2Int[] Directions = new Vector2Int[]
         {
             new Vector2Int(1,1),
             new Vector2Int(-1,-1),
@@ -82,13 +83,13 @@ namespace Controllers
         public BishopBehaviour(int team) : base(team)
         {
         }
+        
 
         public override List<Vector2Int> GetPossibleTileMoveFromCoordinates(Vector2Int coordinates)
         {
             List<Vector2Int> tiles = new List<Vector2Int>();
 
-            const int BoardSize = 7;
-            foreach (Vector2Int direction in DiagonalDirections)
+            foreach (Vector2Int direction in Directions)
             {
                 for (int i = 1; i <= BoardSize; i++)
                 {
@@ -127,6 +128,68 @@ namespace Controllers
 
         public override void HasMoved()
         {
+        }
+    }
+
+    public class RookBehaviour : ChessPieceBehaviour
+    {
+        public Vector2Int[] Directions = new Vector2Int[]
+        {
+            new Vector2Int(1,0),
+            new Vector2Int(0,1),
+            new Vector2Int(1,0),
+            new Vector2Int(0,-1),
+        };
+        
+        public RookBehaviour(int team) : base(team)
+        {
+            
+        }
+
+        public override List<Vector2Int> GetPossibleTileMoveFromCoordinates(Vector2Int coordinates)
+        {
+            List<Vector2Int> tiles = new List<Vector2Int>();
+
+            foreach (Vector2Int direction in Directions)
+            {
+                for (int i = 1; i <= BoardSize; i++)
+                {
+                    Vector2Int newCoordinate = coordinates + direction * i;
+                    if (PlayerGameManager.Instance.Board.IsCoordinateOutOfBoard(newCoordinate))
+                    {
+                        break;
+                    }
+                    
+                    tiles.Add(newCoordinate);
+                    
+                    if (PlayerGameManager.Instance.Board.BoardArray[newCoordinate.x, newCoordinate.y] != null)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return tiles;
+        }
+
+        public override List<Vector2Int> GetPossibleTilesTakeFromCoordinates(Vector2Int coordinates)
+        {
+            return GetPossibleTileMoveFromCoordinates(coordinates);
+        }
+
+        public override List<Vector2Int> GetImpossibleTilesTakeFromCoordinates(Vector2Int coordinates)
+        {
+            return new List<Vector2Int>();
+        }
+
+        public override List<Vector2Int> GetImpossibleTileMoveFromCoordinates(Vector2Int coordinates)
+        {
+            return new List<Vector2Int>();
+        }
+
+        public override void HasMoved()
+        {
+            
         }
     }
 }
